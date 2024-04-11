@@ -21,6 +21,3 @@ target/
 /.maven
 /.repository
 .flattened-pom.xml
-
-# Workflow # 
-.github*
