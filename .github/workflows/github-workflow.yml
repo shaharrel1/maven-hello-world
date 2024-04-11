@@ -17,11 +17,11 @@ jobs:
     - name: Increase Patch version
       run: |
         cd myapp
-        current_version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-        echo $current_version
-        new_version=$(awk -F'.' '{$2=$2+1; OFS="."; print $1,$2}' <<< "$current_version")
-        echo $new_version
-        mvn versions:set -DnewVersion=$new_version
+      # Incrementing the version number
+        new_version=$(awk -F'.' '/<artifactId>maven-jar-plugin<\/artifactId>/ {getline; gsub(/[<>]/,"",$1); split($1,a,"."); a[3]=a[3]+1; print a[1]"."a[2]"."a[3]}' pom.xml)
+      # Updating the version in the pom.xml file
+        sed -i.bak "s|\(<artifactId>maven-jar-plugin<\/artifactId>\)\(.*\)<version>.*<\/version>|\1\2<version>$new_version<\/version>|g" pom.xml
+
 
 
     - name: Compile code
