@@ -23,6 +23,7 @@ jobs:
         echo $new_version
         mvn versions:set -DnewVersion=$new_version
         echo "NEW_VERSION=$new_version" >> $GITHUB_ENV
+        echo "::set-output name=new_version::$new_version"
 
 
     - name: Compile code
@@ -39,7 +40,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: myapp-artifact
-        path: myapp/target/myapp-$NEW_VERSION.jar
+        path: myapp/target/myapp-${{ steps.increase_version.outputs.new_version }}.jar
 
     - name: Debug new version
       run: |
