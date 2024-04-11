@@ -67,12 +67,9 @@ jobs:
         docker pull shaharrel/myapp:$NEW_VERSION
         docker run --rm shaharrel/myapp:$NEW_VERSION
 
-    - name: Save new version as artifact
-      run: echo "::set-output name=new_version::${{ env.NEW_VERSION }}"
-      shell: bash
-
-    - name: Upload version as artifact
-      uses: actions/upload-artifact@v2
+    - name: Deploy with Helm
+      uses: azure/helm-v3@v2
       with:
-        name: new-version
-        path: version.txt
+        command: upgrade
+        arguments: myapp ./myapp-chart --set image.tag=${{env.NEW_VERSION}}
+        kubeconfig: ${{ secrets.KUBECONFIG }}
