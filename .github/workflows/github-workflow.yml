@@ -70,4 +70,8 @@ jobs:
     - name: Deploy with Helm
       run: |
         sed -i "s/^  tag: .*/  tag: $NEW_VERSION/" myapp-chart/values.yaml
+        git config --global user.email "shahar2929@gmail.com"
+        git config --global user.name "shaharrel1"
+        git commit -am "Update image tag to $NEW_VERSION"
+        git push
       
