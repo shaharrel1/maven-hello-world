@@ -13,14 +13,13 @@ jobs:
     - name: Check out code
       uses: actions/checkout@v2
       
-      
+
     - name: Increase Patch version
       run: |
         cd myapp
         current_version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
         new_version=$(echo $current_version | awk -F'-' '{print $1}' | awk -F'.' '{$NF+=1; OFS="."; print $0}' )
-        mvn versions:set -DnewVersion=$new_version-SNAPSHOT
-
+        mvn versions:set -DnewVersion=${new_version}-SNAPSHOT
 
 
     - name: Compile code
