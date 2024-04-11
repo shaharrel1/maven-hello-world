@@ -66,3 +66,13 @@ jobs:
       run: |
         docker pull shaharrel/myapp:$NEW_VERSION
         docker run --rm shaharrel/myapp:$NEW_VERSION
+
+    - name: Save new version as artifact
+      run: echo "::set-output name=new_version::${{ env.NEW_VERSION }}"
+      shell: bash
+
+    - name: Upload version as artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: new-version
+        path: version.txt
