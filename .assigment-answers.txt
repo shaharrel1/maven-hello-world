@@ -1,0 +1,5 @@
+2.  Understand this repository -
+    a.Java
+    b.Maven is a build automation tool used primarily for Java projects.
+    c.Maven works based on a project object model (POM), which is an XML file that describes the structure and configuration of your project. In this repository - myapp/pom.xml
+    d.It is a file that describe the project and its configuration, including dependencies on external libraries, plugins, and build profiles
