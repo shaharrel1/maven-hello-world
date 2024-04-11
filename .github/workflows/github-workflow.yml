@@ -48,7 +48,7 @@ jobs:
     - name: Build Docker image
       run: |
         cd myapp
-        docker build -t myapp:$NEW_VERSION -f ../Dockerfile .
+        docker build -t myapp:$NEW_VERSION --build-arg NEW_VERSION=$NEW_VERSION -f ../Dockerfile .
 
     - name: Tag Docker image
       run: docker tag myapp:$NEW_VERSION myapp:$NEW_VERSION

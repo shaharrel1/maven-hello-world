@@ -4,6 +4,9 @@ FROM openjdk:7-jdk-alpine
 # Set the working directory in the container
 WORKDIR /app
 
+# Define a build argument
+ARG NEW_VERSION
+
 # Copy the compiled JAR file from the host into the container at /app
 COPY myapp/target/myapp-$NEW_VERSION.jar /app/myapp.jar
 
