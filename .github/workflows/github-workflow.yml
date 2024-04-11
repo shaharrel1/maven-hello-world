@@ -35,10 +35,12 @@ jobs:
         mvn package
 
     - name: Create artifact
+      run: |
+        version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
       uses: actions/upload-artifact@v2
       with:
         name: myapp-artifact
-        path: myapp/target/myapp-$new_version.jar
+        path: myapp/target/myapp-$version.jar
 
     - name: Build Docker image
       run: |
