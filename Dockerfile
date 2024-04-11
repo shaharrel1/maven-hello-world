@@ -5,7 +5,7 @@ FROM openjdk:7-jdk-alpine
 WORKDIR /app
 
 # Copy the compiled JAR file from the host into the container at /app
-COPY myapp/target/myapp.jar /app/myapp.jar
+COPY myapp/target/myapp-$NEW_VERSION.jar /app/myapp.jar
 
 # Run the application when the container launches
 CMD ["java", "-jar", "myapp.jar"]
