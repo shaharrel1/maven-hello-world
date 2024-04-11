@@ -7,6 +7,9 @@ WORKDIR /build
 # Copy the source code into the container
 COPY . .
 
+# Change directory to where the pom.xml is located
+WORKDIR /build/myapp
+
 # Build the application
 RUN mvn clean package
 
