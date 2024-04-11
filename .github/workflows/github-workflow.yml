@@ -70,3 +70,4 @@ jobs:
     - name: Deploy with Helm
       run: |
         sed -i "s/^  tag: .*/  tag: $NEW_VERSION/" myapp-chart/values.yaml
+      
