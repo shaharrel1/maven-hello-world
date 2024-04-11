@@ -22,6 +22,7 @@ jobs:
         new_version=$(awk -F'.' '{$3=$3+1; OFS="."; print $1,$2,$3}' <<< "$current_version")
         echo $new_version
         mvn versions:set -DnewVersion=$new_version
+        echo "::set-output name=new_version::$new_version"
 
 
     - name: Compile code
@@ -35,21 +36,18 @@ jobs:
         mvn package
 
     - name: Create artifact
-      run: |
-        version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
       uses: actions/upload-artifact@v2
       with:
         name: myapp-artifact
-        path: myapp/target/myapp-$version.jar
+        path: myapp/target/myapp-${{ steps.increase_version.outputs.new_version }}.jar
 
     - name: Build Docker image
       run: |
         cd myapp
-        docker build -t myapp:$version -f ../Dockerfile .
+        docker build -t myapp:${{ steps.increase_version.outputs.new_version }} -f ../Dockerfile .
 
     - name: Tag Docker image
-      run: docker tag myapp:$version myapp:$version
-
+      run: docker tag myapp:${{ steps.increase_version.outputs.new_version }} myapp:${{ steps.increase_version.outputs.new_version }}
     - name: Login to Docker Hub
       uses: docker/login-action@v1
       with:
@@ -58,9 +56,9 @@ jobs:
 
     - name: Push Docker image to Docker Hub
       run: |
-        docker push myapp:$version
+        docker push myapp:${{ steps.increase_version.outputs.new_version }}
 
     - name: Download and run Docker image
       run: |
-        docker pull myapp:$version
-        docker run --rm myapp:$version
+        docker pull myapp:${{ steps.increase_version.outputs.new_version }}
+        docker run --rm myapp:${{ steps.increase_version.outputs.new_version }}
