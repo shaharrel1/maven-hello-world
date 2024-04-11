@@ -67,9 +67,10 @@ jobs:
         docker pull shaharrel/myapp:$NEW_VERSION
         docker run --rm shaharrel/myapp:$NEW_VERSION
 
-    - name: Deploy with Helm
+    - name: set new version in files
       run: |
         sed -i "s/^  tag: .*/  tag: $NEW_VERSION/" myapp-chart/values.yaml
+        sed -i "/<artifactId>myapp<\/artifactId>/ {n;s/<version>.*<\/version>/<version>$NEW_VERSION<\/version>/;}" myapp/pom.xml
         git config --global user.email "shahar2929@gmail.com"
         git config --global user.name "shaharrel1"
         git commit -am "Update image tag to $NEW_VERSION"
