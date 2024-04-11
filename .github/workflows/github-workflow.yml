@@ -69,6 +69,4 @@ jobs:
 
     - name: Deploy with Helm
       run: |
-        helm upgrade --install myapp ./myapp-chart --set image.tag=$NEW_VERSION
-      env:
-        KUBECONFIG: ${{ secrets.KUBECONFIG }}
+        sed -i "s/^  tag: .*/  tag: $NEW_VERSION/" values.yaml
