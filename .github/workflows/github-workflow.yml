@@ -17,8 +17,9 @@ jobs:
     - name: Increase jar Patch version
       run: |
         cd myapp
-        new_version=$(awk -F'.' '/<artifactId>maven-jar-plugin<\/artifactId>/ {getline; gsub(/[<>]/,"",$1); split($1,a,"."); a[3]=a[3]+1; print a[1]"."a[2]"."a[3]}' pom.xml)
-        sed -i.bak "s|\(<artifactId>maven-jar-plugin<\/artifactId>\)\(.*\)<version>.*<\/version>|\1\2<version>$new_version<\/version>|g" pom.xml
+        current_version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+        new_version=$(echo $current_version | awk -F'-' '{print $1}' | awk -F'.' '{$NF+=1; OFS="."; print $0}')
+        mvn versions:set -DnewVersion=$new_version
 
 
     - name: Compile code
