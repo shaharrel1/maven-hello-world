@@ -22,11 +22,9 @@ jobs:
         new_version=$(awk -F'.' '{$3=$3+1; OFS="."; print $1,$2,$3}' <<< "$current_version")
         echo $new_version
         mvn versions:set -DnewVersion=$new_version
-        echo $new_version > ${{ github.workspace }}/new_version.txt
+        echo "NEW_VERSION=$new_version" >> $GITHUB_ENV
 
-    - name: Set global environment variable
-      run: echo "::set-env name=NEW_VERSION::$(cat ${{ github.workspace }}/new_version.txt)"
-      
+
     - name: Compile code
       run: |
         cd myapp
