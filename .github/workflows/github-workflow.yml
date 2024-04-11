@@ -19,7 +19,7 @@ jobs:
         cd myapp
         current_version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
         echo $current_version
-        new_version=$(echo $current_version | awk -F'-' '{print $1}' | awk -F'.' '{$NF+=1; OFS="."; print $0}')
+        new_version=$(awk -F'.' '{$3=$3+1; OFS="."; print $1,$2,$3}' <<< "$current_version")
         echo $new_version
         mvn versions:set -DnewVersion=$new_version
 
