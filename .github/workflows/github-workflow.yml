@@ -15,14 +15,19 @@ jobs:
       
     - name: Increase Patch version
       run: |
-        version=$(awk -F'[.-]' '/<version>/{print $2 "." $3 "." ++$4 "-SNAPSHOT"}' myapp/pom.xml)
+        cd myapp
+        version=$(awk -F'[.-]' '/<version>/{print $2 "." $3 "." ++$4 "-SNAPSHOT"}' pom.xml)
         mvn versions:set -DnewVersion=$version
 
     - name: Compile code
-      run: mvn compile
+      run: |
+        cd myapp
+        mvn compile
 
     - name: Package artifact
-      run: mvn package
+      run: |
+        cd myapp
+        mvn package
 
     - name: Create artifact
       uses: actions/upload-artifact@v2
@@ -32,7 +37,8 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build -t myapp:$version -f Dockerfile .
+        cd myapp
+        docker build -t myapp:$version -f ../Dockerfile .
 
     - name: Tag Docker image
       run: docker tag myapp:$version myapp:$version
