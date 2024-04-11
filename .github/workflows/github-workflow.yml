@@ -22,8 +22,10 @@ jobs:
         new_version=$(awk -F'.' '{$3=$3+1; OFS="."; print $1,$2,$3}' <<< "$current_version")
         echo $new_version
         mvn versions:set -DnewVersion=$new_version
-        echo "::set-output name=new_version::$new_version"
+        echo $new_version > ../new_version.txt
 
+    - name: Set global environment variable
+      run: echo "::set-env name=NEW_VERSION::$(cat ../new_version.txt)"
 
     - name: Compile code
       run: |
@@ -39,11 +41,11 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: myapp-artifact
-        path: myapp/target/myapp-${{ steps.increase_version.outputs.new_version }}.jar
+        path: myapp/target/myapp-$new_version.jar
 
     - name: Debug new version
       run: |
-        echo "New version: ${{ steps.increase_version.outputs.new_version }}"
+        echo "New version: $new_version and $NEW_VERSION"
     
     - name: Build Docker image
       run: |
